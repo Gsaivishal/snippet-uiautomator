@@ -18,23 +18,27 @@ package com.google.android.mobly.snippet.uiautomator;
 
 import android.app.Instrumentation;
 import android.app.UiAutomation;
-
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
-
 
 /** Initialize UiAutomator when starting Mobly Snippet service. */
 public class UiAutomator {
   private static final Instrumentation instrumentation =
       InstrumentationRegistry.getInstrumentation();
-  private static final UiAutomation uiAutomation = instrumentation.getUiAutomation();
-  private static final UiDevice uiDevice = UiDevice.getInstance(instrumentation);
+  private static UiAutomation uiAutomation;
+  private static UiDevice uiDevice;
 
-  public static UiAutomation getUiAutomation() {
+  public static synchronized UiAutomation getUiAutomation() {
+    if (uiAutomation == null) {
+      uiAutomation = instrumentation.getUiAutomation();
+    }
     return uiAutomation;
   }
 
-  public static UiDevice getUiDevice() {
+  public static synchronized UiDevice getUiDevice() {
+    if (uiDevice == null) {
+      uiDevice = UiDevice.getInstance(instrumentation);
+    }
     return uiDevice;
   }
 
