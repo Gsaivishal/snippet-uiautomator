@@ -30,11 +30,13 @@ from snippet_uiautomator import configurator as uiconfig
 from snippet_uiautomator import constants
 from snippet_uiautomator import errors
 from snippet_uiautomator import snippet_client
+from snippet_uiautomator import uiautomator_g3
 from snippet_uiautomator import uidevice
 from snippet_uiautomator import uiobject2
 from snippet_uiautomator import uiwatcher
 from snippet_uiautomator import utils
 
+UIAUTOMATOR_APK_PATH = uiautomator_g3.UIAUTOMATOR_APK_PATH
 UIAUTOMATOR_PACKAGE_NAME = 'com.google.android.mobly.snippet.uiautomator'
 
 ANDROID_SERVICE_NAME = 'uiautomator'
@@ -70,7 +72,7 @@ class Snippet:
        will be loaded to the default user.
   """
 
-  file_path: str = dataclasses.field(default_factory=utils.get_uiautomator_apk)
+  file_path: str = dataclasses.field(default_factory=uiautomator_g3.get_uiautomator_apk)
   package_name: str = UIAUTOMATOR_PACKAGE_NAME
   ui_public_service_name: str = PUBLIC_SERVICE_NAME
   ui_hidden_service_name: Optional[str] = None
@@ -181,13 +183,17 @@ class UiAutomatorService(base_service.BaseService):
         self._device.services.register(
             'snippets', snippet_management_service.SnippetManagementService
         )
+      client_config = snippet_client_v2.Config(
+          user_id=self._configs.snippet.user_id
+      )
+      client_config.am_instrument_options.update(
+          self._configs.configurator.to_dict()
+      )
       client = snippet_client.SnippetClient(
           user_args=self._user_args,
           package=self._configs.snippet.package_name,
           ad=self._device,
-          config=None
-          if self._configs.snippet.user_id is None
-          else snippet_client_v2.Config(user_id=self._configs.snippet.user_id),
+          config=client_config,
       )
       client.initialize()
       snippet_manager._snippet_clients[self._service] = client  # pylint: disable=protected-access
