@@ -36,7 +36,6 @@ from snippet_uiautomator import uiobject2
 from snippet_uiautomator import uiwatcher
 from snippet_uiautomator import utils
 
-UIAUTOMATOR_APK_PATH = uiautomator_g3.UIAUTOMATOR_APK_PATH
 UIAUTOMATOR_PACKAGE_NAME = 'com.google.android.mobly.snippet.uiautomator'
 
 ANDROID_SERVICE_NAME = 'uiautomator'
@@ -69,10 +68,12 @@ class Snippet:
       existing snippet client. This can be None if the Snippet UiAutomator is
       not wrapped into other snippet apps.
     user_id: The user id where the snippet is loaded. If not set, the snippet
-       will be loaded to the default user.
+      will be loaded to the default user.
   """
 
-  file_path: str = dataclasses.field(default_factory=uiautomator_g3.get_uiautomator_apk)
+  file_path: str = dataclasses.field(
+      default_factory=uiautomator_g3.get_uiautomator_apk
+  )
   package_name: str = UIAUTOMATOR_PACKAGE_NAME
   ui_public_service_name: str = PUBLIC_SERVICE_NAME
   ui_hidden_service_name: Optional[str] = None
