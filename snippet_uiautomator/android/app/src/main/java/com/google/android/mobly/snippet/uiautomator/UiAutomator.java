@@ -18,69 +18,28 @@ package com.google.android.mobly.snippet.uiautomator;
 
 import android.app.Instrumentation;
 import android.app.UiAutomation;
-import android.os.Bundle;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.uiautomator.Configurator;
 import androidx.test.uiautomator.UiDevice;
 
 /** Initialize UiAutomator when starting Mobly Snippet service. */
 public class UiAutomator {
   private static final Instrumentation instrumentation =
       InstrumentationRegistry.getInstrumentation();
-  private static final UiAutomation uiAutomation;
-  private static final UiDevice uiDevice;
+  private static UiAutomation uiAutomation;
+  private static UiDevice uiDevice;
 
-  static {
-    applyFlagsFromArguments();
-    uiAutomation = initializeUiAutomation();
-    uiDevice = UiDevice.getInstance(instrumentation);
-  }
-
-  public static UiAutomation getUiAutomation() {
+  public static synchronized UiAutomation getUiAutomation() {
+    if (uiAutomation == null) {
+      uiAutomation = instrumentation.getUiAutomation();
+    }
     return uiAutomation;
   }
 
-  public static UiDevice getUiDevice() {
+  public static synchronized UiDevice getUiDevice() {
+    if (uiDevice == null) {
+      uiDevice = UiDevice.getInstance(instrumentation);
+    }
     return uiDevice;
-  }
-
-  private static UiAutomation initializeUiAutomation() {
-    Bundle arguments = InstrumentationRegistry.getArguments();
-    if (arguments.containsKey("uiAutomationFlags")) {
-      try {
-        int flags = Integer.parseInt(arguments.getString("uiAutomationFlags"));
-        return instrumentation.getUiAutomation(flags);
-      } catch (NumberFormatException e) {
-        // Ignore invalid flags
-      }
-    }
-    return instrumentation.getUiAutomation();
-  }
-
-  private static void applyFlagsFromArguments() {
-    Bundle arguments = InstrumentationRegistry.getArguments();
-    if (arguments.containsKey("uiAutomationFlags")) {
-      try {
-        int flags = Integer.parseInt(arguments.getString("uiAutomationFlags"));
-        Configurator.getInstance().setUiAutomationFlags(flags);
-      } catch (NumberFormatException e) {
-        // Ignore invalid flags
-      }
-    }
-    if (arguments.containsKey("toolType")) {
-      try {
-        int toolType = Integer.parseInt(arguments.getString("toolType"));
-        Configurator.getInstance().setToolType(toolType);
-      } catch (NumberFormatException e) {
-      }
-    }
-    if (arguments.containsKey("waitForIdleTimeout")) {
-      try {
-        long timeout = Long.parseLong(arguments.getString("waitForIdleTimeout"));
-        Configurator.getInstance().setWaitForIdleTimeout(timeout);
-      } catch (NumberFormatException e) {
-      }
-    }
   }
 
   private UiAutomator() {}

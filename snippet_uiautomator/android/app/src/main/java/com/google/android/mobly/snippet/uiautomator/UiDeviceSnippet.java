@@ -20,7 +20,6 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import android.graphics.Point;
 import android.os.RemoteException;
-import androidx.test.uiautomator.UiDevice;
 import com.google.android.mobly.snippet.Snippet;
 import com.google.android.mobly.snippet.rpc.Rpc;
 import com.google.android.mobly.snippet.rpc.RpcOptional;
@@ -46,148 +45,147 @@ import org.json.JSONObject;
  * href="https://developer.android.com/reference/androidx/test/uiautomator/UiDevice">UiDevice</a>
  */
 public class UiDeviceSnippet implements Snippet {
-  protected UiDevice uiDevice = UiAutomator.getUiDevice();
 
   @Rpc(description = "Performs a click at arbitrary coordinates specified by the user.")
   public boolean click(int x, int y) {
-    return uiDevice.click(x, y);
+    return UiAutomator.getUiDevice().click(x, y);
   }
 
   @Rpc(description = "Performs a swipe from one coordinate to another coordinate.")
   public boolean drag(int startX, int startY, int endX, int endY, int steps) {
-    return uiDevice.drag(startX, startY, endX, endY, steps);
+    return UiAutomator.getUiDevice().drag(startX, startY, endX, endY, steps);
   }
 
   @Rpc(description = "Dumps the current window hierarchy to a string.")
   public String dump() throws IOException {
     try (OutputStream outputStream = new ByteArrayOutputStream()) {
-      uiDevice.dumpWindowHierarchy(outputStream);
+      UiAutomator.getUiDevice().dumpWindowHierarchy(outputStream);
       return outputStream.toString();
     }
   }
 
   @Rpc(description = "Returns all objects that match the selector criteria.")
   public ImmutableList<UiObject2Info> findObjects(Selector selector) throws SelectorException {
-    return uiDevice.findObjects(selector.toBySelector()).stream()
+    return UiAutomator.getUiDevice().findObjects(selector.toBySelector()).stream()
         .map(Info::getUiObject2Info)
         .collect(toImmutableList());
   }
 
   @Rpc(description = "Disables the sensors and freezes rotation at its current rotation state.")
   public boolean freezeRotation() {
-    return tryToExecute(uiDevice::freezeRotation);
+    return tryToExecute(UiAutomator.getUiDevice()::freezeRotation);
   }
 
   @Rpc(description = "Retrieves the name of the last package to report accessibility events.")
   public String getCurrentPackageName() {
-    return uiDevice.getCurrentPackageName();
+    return UiAutomator.getUiDevice().getCurrentPackageName();
   }
 
   @Rpc(description = "Gets the height of the display, in pixels.")
   public int getDisplayHeight() {
-    return uiDevice.getDisplayHeight();
+    return UiAutomator.getUiDevice().getDisplayHeight();
   }
 
   @Rpc(description = "Returns the current rotation of the display, as defined in Surface.")
   public int getDisplayRotation() {
-    return uiDevice.getDisplayRotation();
+    return UiAutomator.getUiDevice().getDisplayRotation();
   }
 
   @Rpc(description = "Returns the display size in dp (device-independent pixel).")
   public PointInfo getDisplaySizeDp() {
-    return Info.getPointInfo(uiDevice.getDisplaySizeDp());
+    return Info.getPointInfo(UiAutomator.getUiDevice().getDisplaySizeDp());
   }
 
   @Rpc(description = "Gets the width of the display, in pixels.")
   public int getDisplayWidth() {
-    return uiDevice.getDisplayWidth();
+    return UiAutomator.getUiDevice().getDisplayWidth();
   }
 
   @Rpc(description = "Retrieves default launcher package name.")
   public String getLauncherPackageName() {
-    return uiDevice.getLauncherPackageName();
+    return UiAutomator.getUiDevice().getLauncherPackageName();
   }
 
   @Rpc(description = "Retrieves the product name of the device.")
   public String getProductName() {
-    return uiDevice.getProductName();
+    return UiAutomator.getUiDevice().getProductName();
   }
 
   @Rpc(description = "Returns all properties of device information.")
   public UiDeviceInfo getDevInfo() {
-    return Info.getUiDeviceInfo(uiDevice);
+    return Info.getUiDeviceInfo(UiAutomator.getUiDevice());
   }
 
   @Rpc(description = "Returns whether there is a match for the given selector criteria.")
   public boolean hasObject(Selector selector) throws SelectorException {
-    return uiDevice.hasObject(selector.toBySelector());
+    return UiAutomator.getUiDevice().hasObject(selector.toBySelector());
   }
 
   @Rpc(description = "Checks the power manager if the screen is ON.")
   public boolean isScreenOn() throws RemoteException {
-    return uiDevice.isScreenOn();
+    return UiAutomator.getUiDevice().isScreenOn();
   }
 
   @Rpc(description = "Opens the notification shade.")
   public boolean openNotification() {
-    return uiDevice.openNotification();
+    return UiAutomator.getUiDevice().openNotification();
   }
 
   @Rpc(description = "Opens the Quick Settings shade.")
   public boolean openQuickSettings() {
-    return uiDevice.openQuickSettings();
+    return UiAutomator.getUiDevice().openQuickSettings();
   }
 
   @Rpc(description = "Simulates a short press on the BACK button.")
   public boolean pressBack() {
-    return uiDevice.pressBack();
+    return UiAutomator.getUiDevice().pressBack();
   }
 
   @Rpc(description = "Simulates a short press on the CENTER button.")
   public boolean pressDPadCenter() {
-    return uiDevice.pressDPadCenter();
+    return UiAutomator.getUiDevice().pressDPadCenter();
   }
 
   @Rpc(description = "Simulates a short press on the DOWN button.")
   public boolean pressDPadDown() {
-    return uiDevice.pressDPadDown();
+    return UiAutomator.getUiDevice().pressDPadDown();
   }
 
   @Rpc(description = "Simulates a short press on the LEFT button.")
   public boolean pressDPadLeft() {
-    return uiDevice.pressDPadLeft();
+    return UiAutomator.getUiDevice().pressDPadLeft();
   }
 
   @Rpc(description = "Simulates a short press on the RIGHT button.")
   public boolean pressDPadRight() {
-    return uiDevice.pressDPadRight();
+    return UiAutomator.getUiDevice().pressDPadRight();
   }
 
   @Rpc(description = "Simulates a short press on the UP button.")
   public boolean pressDPadUp() {
-    return uiDevice.pressDPadUp();
+    return UiAutomator.getUiDevice().pressDPadUp();
   }
 
   @Rpc(description = "Simulates a short press on the DELETE key.")
   public boolean pressDelete() {
-    return uiDevice.pressDelete();
+    return UiAutomator.getUiDevice().pressDelete();
   }
 
   @Rpc(description = "Simulates a short press on the ENTER key.")
   public boolean pressEnter() {
-    return uiDevice.pressEnter();
+    return UiAutomator.getUiDevice().pressEnter();
   }
 
   @Rpc(description = "Simulates a short press on the HOME key.")
   public boolean pressHome() {
-    return uiDevice.pressHome();
+    return UiAutomator.getUiDevice().pressHome();
   }
 
   @Rpc(description = "Simulates a short press using a key code.")
   public boolean pressKeyCode(int keyCode, @RpcOptional Integer metaState) {
     return metaState == null
-        ? uiDevice.pressKeyCode(keyCode)
-        : uiDevice.pressKeyCode(keyCode, metaState);
+        ? UiAutomator.getUiDevice().pressKeyCode(keyCode)
+        : UiAutomator.getUiDevice().pressKeyCode(keyCode, metaState);
   }
 
   @Rpc(description = "Simulates short press one or more keys using key code.")
@@ -198,28 +196,28 @@ public class UiDeviceSnippet implements Snippet {
       keyCodeArray[i] = keyCodes.getInt(i);
     }
     return metaState == null
-        ? uiDevice.pressKeyCodes(keyCodeArray)
-        : uiDevice.pressKeyCodes(keyCodeArray, metaState);
+        ? UiAutomator.getUiDevice().pressKeyCodes(keyCodeArray)
+        : UiAutomator.getUiDevice().pressKeyCodes(keyCodeArray, metaState);
   }
 
   @Rpc(description = "Simulates a short press on the MENU key.")
   public boolean pressMenu() {
-    return uiDevice.pressMenu();
+    return UiAutomator.getUiDevice().pressMenu();
   }
 
   @Rpc(description = "Simulates a short press on the RECENT APPS button.")
   public boolean pressRecentApps() throws RemoteException {
-    return uiDevice.pressRecentApps();
+    return UiAutomator.getUiDevice().pressRecentApps();
   }
 
   @Rpc(description = "Simulates a short press on the SEARCH button.")
   public boolean pressSearch() {
-    return uiDevice.pressSearch();
+    return UiAutomator.getUiDevice().pressSearch();
   }
 
   @Rpc(description = "Enables or disables layout hierarchy compression.")
   public void setCompressedLayoutHierarchy(boolean compressed) {
-    uiDevice.setCompressedLayoutHierarchy(compressed);
+    UiAutomator.getUiDevice().setCompressedLayoutHierarchy(compressed);
   }
 
   @Rpc(
@@ -227,7 +225,7 @@ public class UiDeviceSnippet implements Snippet {
           "Simulates orienting the device to the left and also freezes rotation by disabling the"
               + " sensors.")
   public boolean setOrientationLeft() {
-    return tryToExecute(uiDevice::setOrientationLeft);
+    return tryToExecute(UiAutomator.getUiDevice()::setOrientationLeft);
   }
 
   @Rpc(
@@ -235,7 +233,7 @@ public class UiDeviceSnippet implements Snippet {
           "Simulates orienting the device into its natural orientation and also freezes rotation by"
               + " disabling the sensors.")
   public boolean setOrientationNatural() {
-    return tryToExecute(uiDevice::setOrientationNatural);
+    return tryToExecute(UiAutomator.getUiDevice()::setOrientationNatural);
   }
 
   @Rpc(
@@ -243,7 +241,7 @@ public class UiDeviceSnippet implements Snippet {
           "Simulates orienting the device to the right and also freezes rotation by disabling the"
               + " sensors.")
   public boolean setOrientationRight() {
-    return tryToExecute(uiDevice::setOrientationRight);
+    return tryToExecute(UiAutomator.getUiDevice()::setOrientationRight);
   }
 
   @Rpc(
@@ -251,12 +249,12 @@ public class UiDeviceSnippet implements Snippet {
           "Simulates a short press on the POWER button if the screen is ON, do nothing if the"
               + " screen is already OFF.")
   public boolean sleep() {
-    return tryToExecute(uiDevice::sleep);
+    return tryToExecute(UiAutomator.getUiDevice()::sleep);
   }
 
   @Rpc(description = "Performs a swipe from one coordinate to another.")
   public boolean swipe(int startX, int startY, int endX, int endY, int steps) {
-    return uiDevice.swipe(startX, startY, endX, endY, steps);
+    return UiAutomator.getUiDevice().swipe(startX, startY, endX, endY, steps);
   }
 
   @Rpc(description = "Performs a swipe between points in the Point array.")
@@ -266,7 +264,7 @@ public class UiDeviceSnippet implements Snippet {
       final JSONObject jsonObject = pointArray.getJSONObject(i);
       segments[i] = new Point(jsonObject.getInt("x"), jsonObject.getInt("y"));
     }
-    return uiDevice.swipe(segments, segmentSteps);
+    return UiAutomator.getUiDevice().swipe(segments, segmentSteps);
   }
 
   @Rpc(
@@ -274,17 +272,17 @@ public class UiDeviceSnippet implements Snippet {
           "Re-enables the sensors and un-freezes the device rotation allowing its contents to"
               + " rotate with the device physical rotation.")
   public boolean unfreezeRotation() {
-    return tryToExecute(uiDevice::unfreezeRotation);
+    return tryToExecute(UiAutomator.getUiDevice()::unfreezeRotation);
   }
 
   @Rpc(description = "Waits for the current application to idle.")
   public void waitForIdle(long timeoutInMillis) {
-    uiDevice.waitForIdle(timeoutInMillis);
+    UiAutomator.getUiDevice().waitForIdle(timeoutInMillis);
   }
 
   @Rpc(description = "Waits for a window content update event to occur.")
   public boolean waitForWindowUpdate(@Nullable String packageName, long timeoutInMillis) {
-    return uiDevice.waitForWindowUpdate(packageName, timeoutInMillis);
+    return UiAutomator.getUiDevice().waitForWindowUpdate(packageName, timeoutInMillis);
   }
 
   @Rpc(
@@ -292,7 +290,7 @@ public class UiDeviceSnippet implements Snippet {
           "Simulates a short press on the POWER button if the screen OFF, do nothing if the screen"
               + " is already ON.")
   public boolean wakeUp() {
-    return tryToExecute(uiDevice::wakeUp);
+    return tryToExecute(UiAutomator.getUiDevice()::wakeUp);
   }
 
   private interface ThrowingRunnable {
