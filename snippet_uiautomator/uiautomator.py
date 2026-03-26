@@ -30,7 +30,6 @@ from snippet_uiautomator import configurator as uiconfig
 from snippet_uiautomator import constants
 from snippet_uiautomator import errors
 from snippet_uiautomator import snippet_client
-from snippet_uiautomator import uiautomator_g3
 from snippet_uiautomator import uidevice
 from snippet_uiautomator import uiobject2
 from snippet_uiautomator import uiwatcher
@@ -71,9 +70,7 @@ class Snippet:
       will be loaded to the default user.
   """
 
-  file_path: str = dataclasses.field(
-      default_factory=uiautomator_g3.get_uiautomator_apk
-  )
+  file_path: str = dataclasses.field(default_factory=utils.get_uiautomator_apk)
   package_name: str = UIAUTOMATOR_PACKAGE_NAME
   ui_public_service_name: str = PUBLIC_SERVICE_NAME
   ui_hidden_service_name: Optional[str] = None
@@ -129,15 +126,13 @@ class UiAutomatorService(base_service.BaseService):
   @property
   def _is_apk_installed(self) -> bool:
     """Checks if the snippet apk is already installed."""
-    all_packages = self._device.adb.shell(
-        [
-            'pm',
-            'list',
-            'packages',
-            *self._user_args,
-            self._configs.snippet.package_name,
-        ]
-    )
+    all_packages = self._device.adb.shell([
+        'pm',
+        'list',
+        'packages',
+        *self._user_args,
+        self._configs.snippet.package_name,
+    ])
     return bool(
         mobly_utils.grep(
             f'^package:{self._configs.snippet.package_name}$', all_packages
@@ -207,12 +202,12 @@ class UiAutomatorService(base_service.BaseService):
 
   def _initial_uidevice(self) -> None:
     """Initializes the UiDevice object."""
-    snippet_client = getattr(self._device, self._service)
-    snippet_client.setConfigurator(self._configs.configurator.to_dict())
+    svc_client = getattr(self._device, self._service)
+    svc_client.setConfigurator(self._configs.configurator.to_dict())
     setattr(
         self._device,
         self._configs.snippet.ui_public_service_name,
-        UiDevice(ui=snippet_client, raise_error=self._configs.raise_error),
+        UiDevice(ui=svc_client, raise_error=self._configs.raise_error),
     )
 
   @property
